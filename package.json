@@ -1,5 +1,5 @@
 {
-  "name": "nicegraph",
+  "name": "@code_monk/nicegraph",
   "version": "1.0.0",
   "description": "nicegraph is a pretty nice graph",
   "directories": {

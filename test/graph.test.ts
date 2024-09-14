@@ -1,4 +1,4 @@
-import { NiceEdge, NiceGraph, NiceNode } from "../src/graph";
+import { AttributeMap, NiceEdge, NiceGraph, NiceNode } from "../src/graph";
 
 test("basic crud", () => {
     const g = new NiceGraph();
@@ -104,40 +104,60 @@ test("basic crud", () => {
 });
 
 
-// test("traversal", async () => {
-//     const g = new NiceGraph();
-//     const john = g.createNode("john", {lastname: "lennon"});
-//     const paul = g.createNode("paul", {lastname: "McCartney"});
-//     const ringo = g.createNode("ringo", {lastname: "Starr"});
-//     const george = g.createNode("george", {lastname: "Harrison"});
-//     const yasir = g.createNode("yasir", {lastname: "arafat"});
+test("traversal", async () => {
+    const g = new NiceGraph();
+    const john = g.createNode("john", {lastname: "lennon"});
+    const paul = g.createNode("paul", {lastname: "McCartney"});
+    const ringo = g.createNode("ringo", {lastname: "Starr"});
+    const george = g.createNode("george", {lastname: "Harrison"});
+    const yasir = g.createNode("yasir", {lastname: "arafat"});
  
-//     g.createEdge(john, paul);
-//     g.createEdge(paul, ringo);
-//     g.createEdge(ringo, george);
+    g.createEdge(john, paul);
+    g.createEdge(paul, ringo);
+    g.createEdge(ringo, george);
 
-//     // number of nodes = 5
-//     expect(g.Order()).toEqual(5);
-//     expect(g.ology.order).toEqual(5);
+    // number of nodes = 5
+    expect(g.Order()).toEqual(5);
+    expect(g.ology.order).toEqual(5);
 
-//     //  number of edges = still 3
-//     expect(g.ology.size).toEqual(3);
-//     expect(g.Size()).toEqual(3);
+    //  number of edges = still 3
+    expect(g.ology.size).toEqual(3);
+    expect(g.Size()).toEqual(3);
 
-//     expect(john.attrs.band).toBeUndefined();
-//     expect(yasir.attrs.band).toBeUndefined();
+    expect(john.attrs.band).toBeUndefined();
+    expect(yasir.attrs.band).toBeUndefined();
 
-//     await john.Traverse(me => {
-//         return new Promise(resolve => {
-//             me.attrs.band = "the beatles";
-//             resolve(true);
-//         });
-//     });
+    const bander = async (n : NiceNode) => {
+        const updater = (attrs : AttributeMap) => {
+            n.attrs.band = "The Beatles";
+            return n.attrs;
+        };
+        return updater;
+    };
 
-//     expect(john.attrs.band).toEqual("the beatles");
-//     expect(paul.attrs.band).toEqual("the beatles");
-//     expect(ringo.attrs.band).toEqual("the beatles");
-//     expect(yasir.attrs.band).toBeUndefined();
+    await g.traverse(john, bander);
 
+    expect(john.attrs.band).toEqual("The Beatles");
+    expect(paul.attrs.band).toEqual("The Beatles");
+    expect(ringo.attrs.band).toEqual("The Beatles");
+    expect(yasir.attrs.band).toBeUndefined();
+    
+    expect(g.ology.getNodeAttribute(john.id,"band")).toEqual("The Beatles");
+    expect(g.ology.getNodeAttribute(yasir.id, "band")).toBeUndefined();
 
-// });
+});
+
+test("bulk", async () => {
+    const g = new NiceGraph();
+    const nodes : NiceNode[] = [];
+    for (let i=0;i<100;i++) {
+        nodes.push(
+            g.createNode()
+        );
+    }
+
+    expect(nodes.length).toEqual(100);
+
+    expect(nodes[25].id).toEqual("foo");
+
+});

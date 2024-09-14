@@ -3,12 +3,12 @@ import { uuidv7 } from "uuidv7";
 
 type NodeId = string;
 
-interface AttributeMap{
+export interface AttributeMap{
     [index : string]: any;
 }
 
-type AttributeUpdater = (attr : AttributeMap) => AttributeMap;
-type NodeTraverser = (n : NiceNode) => Promise<NiceNode[]>;
+export type AttributeUpdater = (attr : AttributeMap) => AttributeMap;
+export type NodeTraverser = (n : NiceNode) => Promise<AttributeUpdater>;
 
 class NiceEntity{
     graph : NiceGraph;
@@ -77,6 +77,12 @@ class NiceGraph{
             OutEdges: new Map(),
             InEdges: new Map()
         };
+    }
+    async traverse(n : NiceNode, fn1 : NodeTraverser) : Promise<any> {
+        return fn1(n).then((fn2) => {
+            this.ology.updateNode(n.id, fn2);
+            return Promise.all(n.Followees().map(m => this.traverse(m, fn1)));
+        });
     }
     getNode(id: NodeId) : NiceNode {
         return this.entities.Nodes.get(id);
