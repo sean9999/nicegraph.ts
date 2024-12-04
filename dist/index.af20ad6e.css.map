@@ -1,0 +1,1 @@
+{"mappings":"AAAA;;;;AAIA","sources":["src/main.css"],"sourcesContent":["body {\n    background-color: aqua;\n}\n\n#sigma-container {\n    border: 5px dashed brown;\n    border-radius: 2em;\n    width: 90vw;\n    height: 90vh;\n}"],"names":[],"version":3,"file":"index.af20ad6e.css.map","sourceRoot":"/__parcel_source_root/"}

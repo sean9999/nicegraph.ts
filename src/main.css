@@ -1,0 +1,10 @@
+body {
+    background-color: aqua;
+}
+
+#sigma-container {
+    border: 5px dashed brown;
+    border-radius: 2em;
+    width: 90vw;
+    height: 90vh;
+}
